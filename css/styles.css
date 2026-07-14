@@ -1231,7 +1231,25 @@ img, svg { display: block; max-width: 100%; }
     line-height: 1.55;
   }
 
-  .story-visuals,
+  .story-visuals {
+    min-height: auto;
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .story-visual {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+    padding: var(--space-md);
+    box-shadow: none;
+  }
+
+  .story-visual img {
+    height: 220px;
+  }
+
   .story-dots,
   .story-progress {
     display: none;

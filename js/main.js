@@ -2,6 +2,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isCompactScreen = window.matchMedia("(max-width: 768px)").matches;
+const prefersMobileMotion = !prefersReducedMotion && isCompactScreen;
 
 /* ---- Nav scroll state ---- */
 const nav = document.getElementById("nav");
@@ -26,7 +27,7 @@ navLinks?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-if (!prefersReducedMotion && !isCompactScreen) {
+if (!prefersReducedMotion) {
   /* ---- Hero entrance ---- */
   const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
   heroTl
@@ -41,47 +42,67 @@ if (!prefersReducedMotion && !isCompactScreen) {
   });
   gsap.to(".doodle-stroke", { strokeDashoffset: 0, duration: 1.8, stagger: 0.15, ease: "power2.inOut", delay: 0.6 });
 
-  /* ---- Scrollytelling: timeline-based crossfade ---- */
   const panels = gsap.utils.toArray(".story-panel");
   const dots = gsap.utils.toArray(".story-dot");
   const visuals = gsap.utils.toArray(".story-visual");
   const progressBar = document.querySelector(".story-progress-bar");
 
-  gsap.set(panels, { opacity: 0, y: 50, pointerEvents: "none" });
-  gsap.set(panels[0], { opacity: 1, y: 0, pointerEvents: "auto" });
-  gsap.set(visuals, { opacity: 0, y: 14, scale: 0.98 });
-  gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
+  /* ---- Scrollytelling: desktop pin or mobile reveal mode ---- */
+  if (prefersMobileMotion) {
+    gsap.set([...panels, ...visuals], { opacity: 0, y: 28 });
+    gsap.utils.toArray(".story-panel, .story-visual").forEach((el) => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power2.out",
+      });
+    });
+    if (progressBar) progressBar.style.width = "100%";
+    dots.forEach((dot, i) => dot.classList.toggle("active", i === 0));
+    visuals.forEach((visual, i) => visual.classList.toggle("active", i === 0));
+  } else {
+    gsap.set(panels, { opacity: 0, y: 50, pointerEvents: "none" });
+    gsap.set(panels[0], { opacity: 1, y: 0, pointerEvents: "auto" });
+    gsap.set(visuals, { opacity: 0, y: 14, scale: 0.98 });
+    gsap.set(visuals[0], { opacity: 1, y: 0, scale: 1 });
 
-  const storyTl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".story",
-      start: "top top",
-      end: () => `+=${window.innerHeight * (panels.length + 0.2)}`,
-      pin: ".story-pin",
-      scrub: 0.6,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        progressBar.style.width = `${self.progress * 100}%`;
-        const activeIdx = Math.min(
-          Math.round(self.progress * (panels.length - 1)),
-          panels.length - 1
-        );
-        dots.forEach((dot, i) => dot.classList.toggle("active", i === activeIdx));
-        visuals.forEach((visual, i) => visual.classList.toggle("active", i === activeIdx));
+    const storyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".story",
+        start: "top top",
+        end: () => `+=${window.innerHeight * (panels.length + 0.2)}`,
+        pin: ".story-pin",
+        scrub: 0.6,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          progressBar.style.width = `${self.progress * 100}%`;
+          const activeIdx = Math.min(
+            Math.round(self.progress * (panels.length - 1)),
+            panels.length - 1
+          );
+          dots.forEach((dot, i) => dot.classList.toggle("active", i === activeIdx));
+          visuals.forEach((visual, i) => visual.classList.toggle("active", i === activeIdx));
+        },
       },
-    },
-  });
+    });
 
-  panels.forEach((panel, i) => {
-    if (i === 0) return;
-    const prev = panels[i - 1];
-    storyTl
-      .to(prev, { opacity: 0, y: -35, duration: 0.8, ease: "power2.inOut" })
-      .to(prev, { pointerEvents: "none", duration: 0 }, "<")
-      .to(panel, { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" }, "<0.35")
-      .to(panel, { pointerEvents: "auto", duration: 0 }, "<");
-  });
+    panels.forEach((panel, i) => {
+      if (i === 0) return;
+      const prev = panels[i - 1];
+      storyTl
+        .to(prev, { opacity: 0, y: -35, duration: 0.8, ease: "power2.inOut" })
+        .to(prev, { pointerEvents: "none", duration: 0 }, "<")
+        .to(panel, { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" }, "<0.35")
+        .to(panel, { pointerEvents: "auto", duration: 0 }, "<");
+    });
+  }
 
   /* ---- Section reveals ---- */
   gsap.utils.toArray(".reveal").forEach((el) => {
