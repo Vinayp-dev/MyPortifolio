@@ -1,6 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isCompactScreen = window.matchMedia("(max-width: 768px)").matches;
 
 /* ---- Nav scroll state ---- */
 const nav = document.getElementById("nav");
@@ -25,7 +26,7 @@ navLinks?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-if (!prefersReducedMotion) {
+if (!prefersReducedMotion && !isCompactScreen) {
   /* ---- Hero entrance ---- */
   const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
   heroTl
@@ -180,5 +181,8 @@ if (!prefersReducedMotion) {
   });
   document.querySelectorAll(".story-dot").forEach((dot, i) => {
     dot.classList.toggle("active", i === 0);
+  });
+  document.querySelectorAll(".story-visual").forEach((visual, i) => {
+    visual.classList.toggle("active", i === 0);
   });
 }

@@ -1107,17 +1107,17 @@ img, svg { display: block; max-width: 100%; }
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding-top: calc(var(--nav-h) + var(--space-lg));
-    padding-bottom: var(--space-xl);
+    padding-top: calc(var(--nav-h) + var(--space-md));
+    padding-bottom: var(--space-lg);
   }
 
   .hero-visual {
     order: -1;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
   .hero-photo-frame {
-    max-width: 280px;
+    max-width: 230px;
     margin: 0 auto;
   }
 
@@ -1126,8 +1126,35 @@ img, svg { display: block; max-width: 100%; }
   }
 
   .photo-doodle {
-    width: 110px;
-    bottom: -22px;
+    width: 96px;
+    bottom: -18px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 15vw, 4.2rem);
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+    max-width: none;
+  }
+
+  .hero-meta {
+    gap: 0.4rem;
+  }
+
+  .doodle-badge {
+    font-size: 0.95rem;
+    padding: 0.2rem 0.65rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
   }
 
   .nav-links {
@@ -1152,6 +1179,63 @@ img, svg { display: block; max-width: 100%; }
   }
 
   .nav-toggle { display: flex; }
+
+  .story {
+    padding: var(--space-lg) 0 0;
+  }
+
+  .story-pin {
+    height: auto;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .story-shell {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: var(--space-md);
+  }
+
+  .story-track {
+    height: auto;
+    max-width: none;
+    padding: 0;
+    text-align: left;
+  }
+
+  .story-panel {
+    position: relative;
+    inset: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+
+  .panel-num {
+    margin-bottom: 0.35rem;
+  }
+
+  .story-panel h2 {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .story-panel p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .story-visuals,
+  .story-dots,
+  .story-progress {
+    display: none;
+  }
 
   .achievement-banner {
     grid-template-columns: 1fr;
@@ -1179,6 +1263,72 @@ img, svg { display: block; max-width: 100%; }
   }
 
   .timeline-marker { display: none; }
+
+  .achievement-collection {
+    padding: var(--space-md);
+  }
+
+  .achievement-card-grid,
+  .achievement-card-grid.hp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .achievement-media-card img {
+    height: auto;
+    max-height: 300px;
+  }
+
+  .contact-links {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.6rem, 8vw, 2.1rem);
+  }
+
+  .achievement-banner {
+    padding: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .achievement-banner-photo {
+    max-width: 140px;
+  }
+
+  .achievement-highlight {
+    font-size: 1.5rem;
+  }
+
+  .cert-list li,
+  .activity-list li {
+    font-size: 0.92rem;
+  }
+
+  .contact-link {
+    padding: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
